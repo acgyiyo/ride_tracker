@@ -14,4 +14,12 @@ public interface RideRepository {
 
 	Ride createRideKeyHolder(Ride ride);
 
+	Ride getRide(Integer id);
+
+	Ride updateRide(Ride ride);
+
+	void updateBatchRide(List<Object[]> updates);
+
+	void deleteRide(Integer id);
+
 }

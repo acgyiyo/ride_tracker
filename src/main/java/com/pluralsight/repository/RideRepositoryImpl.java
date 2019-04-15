@@ -27,7 +27,7 @@ public class RideRepositoryImpl implements RideRepository {
 	@Override
 	public Ride createRideSimple(Ride ride) {
 		// esta es una manera simple y rápida de hacer una consulta
-		jdbcTemplate.update("insert iinto ride (name,duration) values (?,?)", ride.getName(), ride.getDuration());
+		jdbcTemplate.update("insert into ride (name,duration) values (?,?)", ride.getName(), ride.getDuration());
 
 		return null;
 	}
@@ -70,15 +70,16 @@ public class RideRepositoryImpl implements RideRepository {
 			ps.setString(1, ride.getName());
 			ps.setInt(2, ride.getDuration());
 			return ps;
-		},keyHolder);
-		
+		}, keyHolder);
+
 		Number id = keyHolder.getKey();
-		
+
 		return getRide(id.intValue());
 	}
-	
+
+	@Override
 	public Ride getRide(Integer id) {
-		Ride ride = jdbcTemplate.queryForObject("select * from ride where id = ?", new RideRowMapper(),id);
+		Ride ride = jdbcTemplate.queryForObject("select * from ride where id = ?", new RideRowMapper(), id);
 		return ride;
 	}
 
@@ -96,6 +97,23 @@ public class RideRepositoryImpl implements RideRepository {
 		List<Ride> rides2 = jdbcTemplate.query("select * from ride", new RideRowMapper());
 
 		return rides2;
+	}
+
+	@Override
+	public Ride updateRide(Ride ride) {
+		jdbcTemplate.update("update ride set name = ?, duration = ? where id = ?", ride.getName(), ride.getDuration(),
+				ride.getId());
+		return ride;
+	}
+
+	@Override
+	public void updateBatchRide(List<Object[]> updates) {
+		jdbcTemplate.batchUpdate("update ride set duration = ?,ride_date = ? where id = ?", updates);
+	}
+
+	@Override
+	public void deleteRide(Integer id) {
+		jdbcTemplate.update("delete from ride where id = ?", id);
 	}
 
 }

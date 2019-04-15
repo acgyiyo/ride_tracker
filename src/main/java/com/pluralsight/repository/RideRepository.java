@@ -22,4 +22,6 @@ public interface RideRepository {
 
 	void deleteRide(Integer id);
 
+	void deleteRideWithNamedParam(Integer id);
+
 }

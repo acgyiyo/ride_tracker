@@ -10,6 +10,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -114,6 +115,18 @@ public class RideRepositoryImpl implements RideRepository {
 	@Override
 	public void deleteRide(Integer id) {
 		jdbcTemplate.update("delete from ride where id = ?", id);
+//		deleteRideWithNamedParam(id);
+	}
+	
+	@Override
+	public void deleteRideWithNamedParam(Integer id) {
+		NamedParameterJdbcTemplate namedTemplate = new NamedParameterJdbcTemplate(jdbcTemplate);
+		Map<String,Object> paramMap = new HashMap<>();
+		
+		paramMap.put("id", id);
+		System.out.println("estoy a punto de borrar");
+		int borrados=namedTemplate.update("delete from ride where id = :id", paramMap);
+		System.out.println("Borre algo?->> "+ borrados);
 	}
 
 }

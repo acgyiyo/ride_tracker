@@ -5,7 +5,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.pluralsight.model.Ride;
 import com.pluralsight.repository.RideRepository;
@@ -37,17 +39,20 @@ public class RideServiceImpl implements RideService {
 	}
 
 	@Override
+	@Transactional
 	public Ride updateBatchRide(List<Ride> rides) {
 		List<Object[]> updates = new ArrayList<>();
 
 		for (Ride ride : rides) {
 			Object[] temp = { ride.getDuration(), new Date(), ride.getId() };
 			updates.add(temp);
-
 		}
 		rideRepository.updateBatchRide(updates);
 		
-		return null;
+		throw new DataAccessException("prueba del transactionalManager") {
+		};
+		
+//		return null;
 	}
 	
 	@Override
